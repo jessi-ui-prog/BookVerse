@@ -7,8 +7,16 @@ const BOOKS='bookverse_libros';
 const uid=String(USER.id||USER.correo||'usuario');
 const safe=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load=(k,d)=>{try{const x=JSON.parse(localStorage.getItem(k));return x==null?d:x;}catch{return d;}};
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const books=()=>load(BOOKS,[]);
+const save=(k,v)=>{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('bookverse_lectura_'))window.dispatchEvent(new Event('bookverse:biblioteca-local-cambio'));};
+// Catálogo unificado: los libros de Firebase tienen prioridad si coinciden en ID.
+const books=()=>{
+  const local=load(BOOKS,[]);
+  const remotos=Array.isArray(window.bookverseLibrosFirebase)?window.bookverseLibrosFirebase:[];
+  const porId=new Map();
+  (Array.isArray(local)?local:[]).forEach(b=>porId.set(String(b.id),b));
+  remotos.forEach(b=>porId.set(String(b.id),b));
+  return Array.from(porId.values());
+};
 const revKey='bookverse_resenas_v6';
 const prefsKey='bookverse_preferencias_'+uid;
 const statusKey='bookverse_lectura_'+uid;

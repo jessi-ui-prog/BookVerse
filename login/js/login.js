@@ -1,63 +1,166 @@
-// Login de BookVerse: conserva las animaciones del búho y valida usuarios registrados.
-const nextMatch = /^#([a-z]+)(\/[a-z-]+)?$/.exec(new URLSearchParams(location.search).get('next') || '');
-const nextHash = nextMatch && Object.prototype.hasOwnProperty.call(SECTION_NAMES, nextMatch[1]) ? nextMatch[0] : '';
+
+const nextMatch = /^#([a-z]+)(\/[a-z-]+)?$/.exec(
+  new URLSearchParams(location.search).get("next") || ""
+);
+
+const nextHash =
+  nextMatch &&
+  Object.prototype.hasOwnProperty.call(
+    SECTION_NAMES,
+    nextMatch[1]
+  )
+    ? nextMatch[0]
+    : "";
+
 if (nextHash) {
-    document.querySelector('.owl-form .lead').textContent = 'Inicia sesión para entrar a «' + SECTION_NAMES[nextMatch[1]] + '».';
+  document.querySelector(".owl-form .lead").textContent =
+    "Inicia sesión para entrar a «" +
+    SECTION_NAMES[nextMatch[1]] + "».";
 }
 
+// Mantener las animaciones originales del búho.
 mail.onfocus = lookAtCaret;
 mail.oninput = lookAtCaret;
-mail.onblur = () => { owl.lookX.to = 0; owl.lookY.to = 0.6; };
-pass.onfocus = () => wings(COVER, COVER);
-pass.onblur = e => { if (e.relatedTarget !== show) wings(0, 0); };
-pass.oninput = () => { note.textContent = ''; owl.left.v -= NUDGE; owl.right.v -= NUDGE; };
-show.onpointerdown = e => e.preventDefault();
-show.onclick = () => {
-    pass.focus();
-    const peek = pass.type === 'password';
-    pass.type = peek ? 'text' : 'password';
-    wings(COVER, peek ? PEEK : COVER);
-    show.setAttribute('aria-pressed', peek);
-    show.setAttribute('aria-label', peek ? 'Ocultar contraseña' : 'Mostrar contraseña');
-    const r = pass.getBoundingClientRect();
-    if (peek) lookAt(r.left + 70, r.top + r.height / 2);
+
+mail.onblur = () => {
+  owl.lookX.to = 0;
+  owl.lookY.to = 0.6;
 };
-room.addEventListener('pointermove', e => {
-    if (document.activeElement !== mail && document.activeElement !== pass) lookAt(e.clientX, e.clientY);
+
+pass.onfocus = () => wings(COVER, COVER);
+
+pass.onblur = e => {
+  if (e.relatedTarget !== show) wings(0, 0);
+};
+
+pass.oninput = () => {
+  note.textContent = "";
+  owl.left.v -= NUDGE;
+  owl.right.v -= NUDGE;
+};
+
+show.onpointerdown = e => e.preventDefault();
+
+show.onclick = () => {
+  pass.focus();
+
+  const peek = pass.type === "password";
+  pass.type = peek ? "text" : "password";
+
+  wings(COVER, peek ? PEEK : COVER);
+
+  show.setAttribute("aria-pressed", String(peek));
+  show.setAttribute(
+    "aria-label",
+    peek ? "Ocultar contraseña" : "Mostrar contraseña"
+  );
+
+  const r = pass.getBoundingClientRect();
+
+  if (peek) {
+    lookAt(r.left + 70, r.top + r.height / 2);
+  }
+};
+
+room.addEventListener("pointermove", e => {
+  if (
+    document.activeElement !== mail &&
+    document.activeElement !== pass
+  ) {
+    lookAt(e.clientX, e.clientY);
+  }
 });
 
 function cheer() {
-    owl.happy = true;
-    wings(SPREAD, SPREAD);
-    owl.hop.v = HOP;
-    setTimeout(() => { owl.happy = false; wings(0, 0); }, 1500);
-}
-function shakeHead() {
-    owl.shake.v = 1.6;
-    owl.frown = 0.4;
-    setTimeout(() => { owl.frown = 0; }, 900);
+  owl.happy = true;
+  wings(SPREAD, SPREAD);
+  owl.hop.v = HOP;
+
+  setTimeout(() => {
+    owl.happy = false;
+    wings(0, 0);
+  }, 1500);
 }
 
-form.addEventListener('submit', async e => {
-    e.preventDefault();
-    if (btn.disabled) return;
-    btn.disabled = true;
-    btn.textContent = 'Iniciando sesión…';
-    note.textContent = '';
-    try {
-        await new Promise(done => setTimeout(done, 250));
-        const user = authenticateUser(mail.value, pass.value);
-        cheer();
-        form.classList.add('done');
-        btn.textContent = 'Sesión iniciada';
-        // sin destino pedido (?next=), cada rol entra a su panel; con destino se respeta
-        const target = nextHash ? HOME_URL + nextHash
-            : (user.rol === 'administrador' ? '../admin/dashboard.html' : '../usuario/dashboard.html');
-        setTimeout(() => { location.href = target; }, still.matches ? 400 : REDIRECT_DELAY);
-    } catch (err) {
-        shakeHead();
-        note.textContent = err.message;
-        btn.disabled = false;
-        btn.textContent = 'Iniciar sesión';
-    }
+function shakeHead() {
+  owl.shake.v = 1.6;
+  owl.frown = 0.4;
+
+  setTimeout(() => {
+    owl.frown = 0;
+  }, 900);
+}
+
+// Inicio de sesión con Firebase Authentication.
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+
+  if (btn.disabled) return;
+
+  btn.disabled = true;
+  btn.textContent = "Iniciando sesión...";
+  note.textContent = "";
+
+  try {
+    const { auth } = await import(
+      "../../js/firebase-config.js"
+    );
+
+    const { signInWithEmailAndPassword } = await import(
+      "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js"
+    );
+
+    const credenciales = await signInWithEmailAndPassword(
+      auth,
+      mail.value.trim(),
+      pass.value
+    );
+
+    cheer();
+    form.classList.add("done");
+
+    btn.textContent = "Sesión iniciada";
+
+    const nombre =
+      credenciales.user.displayName ||
+      credenciales.user.email;
+
+    note.textContent =
+      "¡Bienvenido a BookVerse, " + nombre +
+      "! Tu sesión de Firebase funciona correctamente.";
+
+    console.log(
+      "Usuario autenticado en Firebase:",
+      credenciales.user.uid
+    );
+
+    setTimeout(() => {
+    window.location.href = "../usuario/dashboard.html";
+    }, 1200);
+
+    // Primero debemos adaptar sus comprobaciones de sesión.
+  
+  } catch (error) {
+    shakeHead();
+
+    const mensajes = {
+      "auth/invalid-credential":
+        "Correo o contraseña incorrectos.",
+      "auth/invalid-email":
+        "Introduce un correo válido.",
+      "auth/user-disabled":
+        "Esta cuenta está deshabilitada.",
+      "auth/too-many-requests":
+        "Demasiados intentos. Inténtalo más tarde.",
+      "auth/network-request-failed":
+        "Comprueba tu conexión a Internet."
+    };
+
+    note.textContent =
+      mensajes[error.code] ||
+      "No se pudo iniciar sesión: " + error.code;
+
+    btn.disabled = false;
+    btn.textContent = "Iniciar sesión";
+  }
 });
