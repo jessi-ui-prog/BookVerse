@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BookVerse, un universo de historias por descubrir. Explora libros, autores y categorías literarias.">
+    <title>BookVerse | Biblioteca virtual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=DM+Sans:wght@400;500;600;700&family=Italianno&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <meta name="theme-color" content="#111110">
+    <!-- tema claro/oscuro + lámpara: va en <head> para aplicar el tema antes de pintar -->
+    <script src="js/theme.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a class="brand" href="#inicio" aria-label="BookVerse, ir al inicio">
+                <span class="brand-mark" aria-hidden="true">B</span>
+                <span>BOOK<span class="gold-text">VERSE</span></span>
+            </a>
+
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+
+            <nav class="main-nav" id="mainNav">
+                <a class="nav-link active" href="#inicio" data-nav="inicio">Inicio</a>
+                <a class="nav-link" href="#biblioteca" data-nav="biblioteca" data-protected>Biblioteca<svg class="lock" viewBox="0 0 12 14" width="9" height="11" aria-hidden="true"><rect x="1.5" y="6" width="9" height="7" rx="1" fill="currentColor"/><path d="M3.5 6V4.2a2.5 2.5 0 0 1 5 0V6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+                <a class="nav-link" href="#categorias" data-nav="categorias" data-protected>Categorías<svg class="lock" viewBox="0 0 12 14" width="9" height="11" aria-hidden="true"><rect x="1.5" y="6" width="9" height="7" rx="1" fill="currentColor"/><path d="M3.5 6V4.2a2.5 2.5 0 0 1 5 0V6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+                <a class="nav-link" href="#nosotros" data-nav="nosotros" data-protected>Nosotros<svg class="lock" viewBox="0 0 12 14" width="9" height="11" aria-hidden="true"><rect x="1.5" y="6" width="9" height="7" rx="1" fill="currentColor"/><path d="M3.5 6V4.2a2.5 2.5 0 0 1 5 0V6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+                <a class="nav-link" id="panelLink" href="#" hidden>Mi panel</a>
+                <a class="nav-link" id="authLink" href="login/index.html">Iniciar sesión</a>
+                <a class="nav-cta" href="#biblioteca">Explorar libros <span>↗</span></a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero view" id="inicio" data-view="inicio">
+            <div class="hero-glow"></div>
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <span class="eyebrow"><span class="eyebrow-line"></span> TU PRÓXIMA HISTORIA COMIENZA AQUÍ</span>
+                    <h1 class="script-title">Un universo de<br>historias por<br><span class="gold-script">descubrir.</span></h1>
+                    <p class="hero-description">Explora mundos, conoce nuevos autores y encuentra ese libro que estabas buscando. Tu próxima aventura está a solo unas páginas de distancia.</p>
+                    <div class="hero-actions">
+                        <a href="#biblioteca" class="button button-gold">Explorar biblioteca <span>→</span></a>
+                        <a href="#nosotros" class="text-link">Conoce BookVerse <span>↗</span></a>
+                    </div>
+                    <div class="hero-note">
+                        <span class="note-star">✦</span>
+                        <span>Un espacio para lectores curiosos y soñadores.</span>
+                    </div>
+                </div>
+
+                <div class="hero-art" aria-label="Composición decorativa de libros">
+                    <div class="art-orbit orbit-one"></div>
+                    <div class="art-orbit orbit-two"></div>
+                    <div class="floating-label label-top">LECTURA SIN LÍMITES</div>
+                    <div class="book-stack">
+                        <div class="book book-back"><span>EL ARTE DE<br>IMAGINAR</span><small>BOOKVERSE EDITION</small></div>
+                        <div class="book book-middle"><span>HISTORIAS<br>ETERNA<span class="book-italic">S</span></span><small>COLECCIÓN CLÁSICOS</small></div>
+                        <div class="book book-front"><span class="front-kicker">UNA HISTORIA</span><strong>AL OTRO<br>LADO DEL<br><i>TIEMPO</i></strong><span class="front-rule"></span><small>BOOKVERSE</small></div>
+                    </div>
+                    <div class="floating-label label-bottom"><span>✦</span> ABRE UN LIBRO, ABRE UN MUNDO</div>
+                    <div class="sparkle sparkle-one">✦</div>
+                    <div class="sparkle sparkle-two">✧</div>
+                </div>
+            </div>
+            <div class="hero-bottom-line"></div>
+        </section>
+
+        <section class="stats-strip view" data-view="inicio" aria-label="Características de BookVerse">
+            <div class="container stats-grid">
+                <div class="stat"><span class="stat-icon">✧</span><div><strong>Explora</strong><small>Nuevas historias</small></div></div>
+                <div class="stat"><span class="stat-icon">⌕</span><div><strong>Descubre</strong><small>Autores fascinantes</small></div></div>
+                <div class="stat"><span class="stat-icon">❖</span><div><strong>Encuentra</strong><small>Tu próxima lectura</small></div></div>
+            </div>
+        </section>
+
+        <section class="section library-section view" id="biblioteca" data-view="biblioteca" hidden>
+            <div class="container">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> UNA SELECCIÓN PARA TI</span>
+                        <h2>Libros que merecen<br>un lugar en tu <span class="gold-text italic">historia.</span></h2>
+                    </div>
+                    <p>Déjate llevar por historias inolvidables. Explora nuestra selección destacada y encuentra inspiración en cada página.</p>
+                </div>
+
+                <div class="catalog-toolbar">
+                    <label class="search-box" for="bookSearch">
+                        <span aria-hidden="true">⌕</span>
+                        <input type="search" id="bookSearch" placeholder="Buscar por título o autor..." autocomplete="off">
+                        <kbd>BUSCAR</kbd>
+                    </label>
+                    <div class="catalog-meta">
+                        <button class="genre-chip" id="genreChip" type="button" hidden>Género: <b id="genreName"></b> <span aria-hidden="true">✕</span><span class="sr-only"> (quitar filtro)</span></button>
+                        <span class="catalog-count" id="catalogCount" aria-live="polite">6 libros destacados</span>
+                    </div>
+                </div>
+
+                <div class="books-grid" id="booksGrid">
+                    <article class="book-card" data-search="cien años de soledad gabriel garcia marquez realismo magico">
+                        <div class="cover cover-one"><span class="cover-top">GABRIEL GARCÍA MÁRQUEZ</span><strong>CIEN AÑOS<br>DE SOLEDAD</strong><span class="cover-decoration">✺</span><small>UNA OBRA MAESTRA</small></div>
+                        <div class="book-info"><span class="book-category">REALISMO MÁGICO</span><h3>Cien años de soledad</h3><p>Gabriel García Márquez</p></div>
+                    </article>
+                    <article class="book-card" data-search="orgullo y prejuicio jane austen romance clasico">
+                        <div class="cover cover-two"><span class="cover-top">JANE AUSTEN</span><strong>ORGULLO<br><i>Y</i> PREJUICIO</strong><span class="cover-decoration">❀</span><small>EDICIÓN CLÁSICA</small></div>
+                        <div class="book-info"><span class="book-category">ROMANCE</span><h3>Orgullo y prejuicio</h3><p>Jane Austen</p></div>
+                    </article>
+                    <article class="book-card" data-search="el principito antoine de saint exupery fantasia">
+                        <div class="cover cover-three"><span class="cover-top">ANTOINE DE SAINT-EXUPÉRY</span><strong>EL<br>PRINCIPITO</strong><span class="cover-decoration">✧</span><small>UNA HISTORIA PARA SIEMPRE</small></div>
+                        <div class="book-info"><span class="book-category">FANTASÍA</span><h3>El principito</h3><p>Antoine de Saint-Exupéry</p></div>
+                    </article>
+                    <article class="book-card" data-search="1984 george orwell distopia ciencia ficcion">
+                        <div class="cover cover-four"><span class="cover-top">GEORGE ORWELL</span><strong>1984</strong><span class="cover-decoration">◉</span><small>EL FUTURO TE OBSERVA</small></div>
+                        <div class="book-info"><span class="book-category">DISTOPÍA</span><h3>1984</h3><p>George Orwell</p></div>
+                    </article>
+                    <article class="book-card" data-search="el gran gatsby f scott fitzgerald clasico">
+                        <div class="cover cover-five"><span class="cover-top">F. SCOTT FITZGERALD</span><strong>EL GRAN<br>GATSBY</strong><span class="cover-decoration">✦</span><small>UN CLÁSICO MODERNO</small></div>
+                        <div class="book-info"><span class="book-category">CLÁSICO</span><h3>El gran Gatsby</h3><p>F. Scott Fitzgerald</p></div>
+                    </article>
+                    <article class="book-card" data-search="la sombra del viento carlos ruiz zafon misterio">
+                        <div class="cover cover-six"><span class="cover-top">CARLOS RUIZ ZAFÓN</span><strong>LA SOMBRA<br>DEL VIENTO</strong><span class="cover-decoration">⌁</span><small>EL CEMENTERIO DE LOS LIBROS OLVIDADOS</small></div>
+                        <div class="book-info"><span class="book-category">MISTERIO</span><h3>La sombra del viento</h3><p>Carlos Ruiz Zafón</p></div>
+                    </article>
+                </div>
+                <p class="empty-state" id="emptyState" hidden>No encontramos libros con esa búsqueda. Intenta con otro título o autor.</p>
+                <p class="demo-note">Catálogo de demostración: en la siguiente etapa conectaremos esta sección con Open Library.</p>
+            </div>
+        </section>
+
+        <section class="categories-section view" id="categorias" data-view="categorias" hidden>
+            <div class="container">
+                <div class="categories-heading">
+                    <div><span class="eyebrow"><span class="eyebrow-line"></span> ENCUENTRA TU GÉNERO</span><h2>¿Qué historia<br>quieres <span class="gold-text italic">vivir hoy?</span></h2></div>
+                    <p>Cada género es una puerta a un mundo diferente. Elige el camino que más te inspire.</p>
+                </div>
+                <div class="category-grid">
+                    <a href="#biblioteca/romance" class="category-card"><span class="category-number">01</span><span class="category-symbol">♡</span><strong>Romance</strong><small>Historias que emocionan</small><span class="category-arrow">↗</span></a>
+                    <a href="#biblioteca/misterio" class="category-card"><span class="category-number">02</span><span class="category-symbol">◇</span><strong>Misterio</strong><small>Secretos por descubrir</small><span class="category-arrow">↗</span></a>
+                    <a href="#biblioteca/fantasia" class="category-card"><span class="category-number">03</span><span class="category-symbol">✧</span><strong>Fantasía</strong><small>Más allá de lo imaginable</small><span class="category-arrow">↗</span></a>
+                    <a href="#biblioteca/ciencia-ficcion" class="category-card"><span class="category-number">04</span><span class="category-symbol">⌘</span><strong>Ciencia ficción</strong><small>Otros mundos y futuros</small><span class="category-arrow">↗</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section view" id="nosotros" data-view="nosotros" hidden>
+            <div class="container about-grid">
+                <div class="about-emblem"><span class="emblem-ring"></span><span class="emblem-book">B</span><span class="emblem-caption">BOOKVERSE · LECTURA · INSPIRACIÓN</span></div>
+                <div class="about-copy">
+                    <span class="eyebrow dark-eyebrow"><span class="eyebrow-line"></span> MÁS QUE UNA BIBLIOTECA</span>
+                    <h2>Las mejores aventuras<br>comienzan con una <span class="gold-text italic">página.</span></h2>
+                    <p>BookVerse es un espacio creado para quienes encuentran en los libros una forma de explorar, aprender y soñar. Queremos acercarte a nuevas historias y ayudarte a descubrir lecturas que dejen huella.</p>
+                    <a href="#biblioteca" class="button button-dark">Descubre tu próximo libro <span>→</span></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-main">
+            <a class="brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">B</span><span>BOOK<span class="gold-text">VERSE</span></span></a>
+            <p>Un universo de historias por descubrir.</p>
+            <a href="#inicio" class="back-top">Volver arriba ↑</a>
+        </div>
+        <div class="container footer-bottom"><span>© <span id="currentYear"></span> BookVerse. Proyecto académico.</span><span>Hecho para los amantes de la lectura <b>✦</b></span></div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

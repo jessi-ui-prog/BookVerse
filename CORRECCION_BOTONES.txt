@@ -1,0 +1,7 @@
+Correccion de botones superpuestos (Etapa 5)
+
+Se elimino el enlace duplicado en la cabecera. El enlace Volver al sitio queda visible en la navegacion lateral, separado de Cerrar sesion. En moviles la navegacion y botones se apilan y centran.
+
+Pruebas: Administrador > Resumen, Gestion de libros, Usuarios, Articulos; Usuario > todas las secciones; vista movil 375px y escritorio. Recarga con Ctrl+F5 para actualizar CSS.
+
+No se modificaron los datos de LocalStorage ni la logica de libros/articulos.

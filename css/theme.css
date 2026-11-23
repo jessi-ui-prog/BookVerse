@@ -1,0 +1,249 @@
+/* ============================================================
+   BOOKVERSE · TEMA CLARO / OSCURO + LÁMPARA
+   Se carga DESPUÉS de styles.css. js/theme.js pone data-theme="light|dark" en <html>.
+   Lámpara encendida = claro · apagada = oscuro.
+   Para ajustar la lámpara: --lamp-scale (tamaño) y right/bottom de .bv-lamp.
+   ============================================================ */
+
+html[data-theme="dark"]  { color-scheme: dark;  background: #111110; }
+html[data-theme="light"] { color-scheme: light; background: #f7f5f0; }
+
+/* transición suave solo durante el cambio de tema */
+html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+    transition: background-color .7s ease, color .7s ease, border-color .7s ease, box-shadow .7s ease, fill .7s ease !important;
+}
+
+/* ============================================================
+   TEMA OSCURO  (hero, categorías y pie ya eran oscuros: se oscurece el resto)
+   ============================================================ */
+html[data-theme="dark"] body { background: #121110; color: #e6e1d6; }
+
+html[data-theme="dark"] .library-section { background: #151412; }
+html[data-theme="dark"] .about-section { background: #131211; }
+html[data-theme="dark"] .dark-eyebrow { color: var(--gold-light); }
+html[data-theme="dark"] .section-heading h2,
+html[data-theme="dark"] .about-copy h2 { color: #f3eee3; }
+html[data-theme="dark"] .section-heading > p,
+html[data-theme="dark"] .about-copy > p { color: #99948b; }
+
+html[data-theme="dark"] .search-box { background: #1c1a17; border-color: rgba(198, 161, 91, .25); }
+html[data-theme="dark"] .search-box input { color: var(--cream); }
+html[data-theme="dark"] .search-box input::placeholder { color: #7d786d; }
+html[data-theme="dark"] .search-box > span,
+html[data-theme="dark"] .search-box kbd { color: var(--gold); }
+html[data-theme="dark"] .catalog-count { color: #8f8a80; }
+html[data-theme="dark"] .genre-chip { color: var(--gold-light); }
+
+html[data-theme="dark"] .cover { box-shadow: 5px 9px 20px rgba(0, 0, 0, .5); }
+html[data-theme="dark"] .book-card:hover .cover { box-shadow: 7px 15px 26px rgba(0, 0, 0, .62); }
+html[data-theme="dark"] .book-category { color: var(--gold); }
+html[data-theme="dark"] .book-info h3 { color: #f1ebdd; }
+html[data-theme="dark"] .book-info p { color: #908b80; }
+html[data-theme="dark"] .empty-state { color: #99948b; }
+html[data-theme="dark"] .demo-note { color: #77736b; }
+
+html[data-theme="dark"] .about-emblem { box-shadow: 0 0 0 12px #1b1915, 0 0 0 13px rgba(198, 161, 91, .32); }
+html[data-theme="dark"] .button-dark { background: var(--gold); color: #171511; }
+html[data-theme="dark"] .button-dark:hover { background: var(--gold-light); }
+
+/* ============================================================
+   TEMA CLARO
+   ============================================================ */
+html[data-theme="light"] body { background: #f7f5f0; }
+html[data-theme="light"] .gold-text { color: #96722f; }
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .hero .eyebrow { color: #8a6a2c; }
+html[data-theme="light"] .eyebrow-line,
+html[data-theme="light"] .hero .eyebrow-line { background: #a8843f; }
+
+/* encabezado */
+html[data-theme="light"] .site-header { background: rgba(255, 254, 250, .96); border-bottom-color: rgba(168, 132, 63, .32); backdrop-filter: blur(8px); }
+html[data-theme="light"] .brand { color: #1d1b17; }
+html[data-theme="light"] .brand-mark { border-color: #a8843f; color: #8a6a2c; }
+html[data-theme="light"] .main-nav { color: #5b564c; }
+html[data-theme="light"] .nav-link:hover,
+html[data-theme="light"] .nav-link.active { color: #8a6a2c; }
+html[data-theme="light"] .nav-cta { border-color: #a8843f; color: #7a5c22; }
+html[data-theme="light"] .nav-cta:hover { background: var(--gold); color: #171511; }
+html[data-theme="light"] .menu-toggle span { background: #8a6a2c; }
+@media (max-width: 680px) {
+    html[data-theme="light"] .main-nav { background: #fffefa; }
+    html[data-theme="light"] .nav-link { border-bottom-color: rgba(40, 30, 10, .08); }
+}
+
+/* hero */
+html[data-theme="light"] .hero { background: radial-gradient(ellipse at 72% 40%, #fffdf6 0%, #f6f1e5 55%, #efe8d8 100%); color: var(--text); }
+html[data-theme="light"] .hero:before { opacity: .55; background-image: linear-gradient(rgba(120, 95, 40, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 95, 40, .1) 1px, transparent 1px); }
+html[data-theme="light"] .hero-glow { background: radial-gradient(circle, rgba(198, 161, 91, .26), transparent 68%); }
+html[data-theme="light"] .hero .script-title { color: #26221a; }
+html[data-theme="light"] .hero .gold-script { background: linear-gradient(100deg, #c19a4b 0%, #a8843f 45%, #7d5f23 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+html[data-theme="light"] .hero .hero-description { color: #5f594e; }
+html[data-theme="light"] .text-link { color: #3b362c; }
+html[data-theme="light"] .text-link span { color: #a8843f; }
+html[data-theme="light"] .hero-note { color: #7b756a; }
+html[data-theme="light"] .note-star,
+html[data-theme="light"] .sparkle { color: #b08a3f; }
+html[data-theme="light"] .art-orbit { border-color: rgba(168, 132, 63, .32); }
+html[data-theme="light"] .floating-label { color: #7e7458; }
+html[data-theme="light"] .label-bottom span { color: #a8843f; }
+html[data-theme="light"] .book { box-shadow: 14px 18px 32px rgba(70, 50, 20, .3); }
+
+/* franja de características */
+html[data-theme="light"] .stats-strip { background: #efe9db; color: var(--text); border-bottom-color: rgba(168, 132, 63, .25); }
+html[data-theme="light"] .stat { border-right-color: rgba(40, 30, 10, .12); }
+html[data-theme="light"] .stat-icon { color: #a8843f; }
+html[data-theme="light"] .stat strong { color: #26221a; }
+html[data-theme="light"] .stat small { color: #7b756a; }
+
+/* categorías */
+html[data-theme="light"] .categories-section { background: #f1ebde; color: var(--text); }
+html[data-theme="light"] .categories-section:after { color: rgba(168, 132, 63, .09); }
+html[data-theme="light"] .categories-heading h2 { color: #26221a; }
+html[data-theme="light"] .categories-heading > p { color: #6c675d; }
+html[data-theme="light"] .category-card { border-color: rgba(168, 132, 63, .35); background: rgba(255, 255, 255, .55); }
+html[data-theme="light"] .category-card:hover { background: rgba(198, 161, 91, .17); border-color: #a8843f; }
+html[data-theme="light"] .category-number { color: #a8843f; }
+html[data-theme="light"] .category-symbol,
+html[data-theme="light"] .category-arrow { color: #a8843f; }
+html[data-theme="light"] .category-card strong { color: #26221a; }
+html[data-theme="light"] .category-card small { color: #7b756a; }
+
+/* pie */
+html[data-theme="light"] .site-footer { background: #efe9db; color: #4a453b; }
+html[data-theme="light"] .footer-main { border-bottom-color: rgba(40, 30, 10, .12); }
+html[data-theme="light"] .footer-main p { color: #6c675d; }
+html[data-theme="light"] .back-top { color: #8a6a2c; }
+html[data-theme="light"] .footer-bottom { color: #7b756a; }
+html[data-theme="light"] .footer-bottom b { color: #a8843f; }
+
+/* ---------- Login y registro, tema claro ---------- */
+html[data-theme="light"] body.login-page { background: var(--cream); }
+html[data-theme="light"] .owl-login { color: var(--text);
+    background: radial-gradient(540px 400px at 50% 30%, rgba(198, 161, 91, .24), transparent 70%), var(--cream); }
+html[data-theme="light"] .owl-login:before { opacity: .55;
+    background-image: linear-gradient(rgba(120, 95, 40, .1) 1px, transparent 1px), linear-gradient(90deg, rgba(120, 95, 40, .1) 1px, transparent 1px); }
+html[data-theme="light"] .login-top { background: rgba(255, 254, 250, .96); border-bottom-color: rgba(168, 132, 63, .32); }
+html[data-theme="light"] .login-back { color: #5b564c; }
+html[data-theme="light"] .login-back:hover { color: #8a6a2c; }
+html[data-theme="light"] .owl-form { background: #fffefa; border-color: rgba(168, 132, 63, .4); box-shadow: 0 30px 60px -30px rgba(70, 50, 20, .35); }
+html[data-theme="light"] .owl-form:before { border-color: rgba(168, 132, 63, .18); }
+html[data-theme="light"] .owl-form h1 { color: #26221a; }
+html[data-theme="light"] .owl-form .lead { color: #6c675d; }
+html[data-theme="light"] .owl-form input { background: #f7f3ea; color: #26221a; border-color: rgba(168, 132, 63, .4); }
+html[data-theme="light"] .owl-form input::placeholder { color: #9a9488; }
+html[data-theme="light"] .owl-form input:-webkit-autofill { -webkit-text-fill-color: #26221a; caret-color: #26221a; box-shadow: inset 0 0 0 100px #f7f3ea; }
+html[data-theme="light"] .owl-form .show { color: #7b756a; }
+html[data-theme="light"] .owl-form .note { color: #b4513c; }
+html[data-theme="light"] .owl-form .demo-hint { color: #7b756a; }
+html[data-theme="light"] .owl-form .demo-hint code { color: #8a6a2c; }
+html[data-theme="light"] .register-prompt { color: #6c675d; }
+html[data-theme="light"] .register-prompt a { color: #8a6a2c; }
+
+html[data-theme="light"] .register-card { background: #fffefa; border-color: rgba(168, 132, 63, .35); box-shadow: 0 22px 60px rgba(70, 50, 20, .14); }
+html[data-theme="light"] .register-card h1 { color: #26221a; }
+html[data-theme="light"] .register-intro,
+html[data-theme="light"] .register-note { color: #6c675d; }
+html[data-theme="light"] #registerForm label { color: #3b362c; }
+html[data-theme="light"] #registerForm input { color: #26221a; background: #f7f3ea; border-color: rgba(168, 132, 63, .4); }
+html[data-theme="light"] .register-message.error { color: #b4513c; }
+html[data-theme="light"] .register-message.success { color: #2f7a44; }
+
+/* ============================================================
+   LÁMPARA (adaptada de "Animated Lamp Login": misma estética, tamaño reducido y fija en pantalla)
+   ============================================================ */
+.bv-theme-root { --lamp-scale: .6; --lamp-right: 22px; --lamp-bottom: 16px; --lamp-h: 360px; --stem: 290px; }
+
+.bv-lamp { position: fixed; right: var(--lamp-right); bottom: var(--lamp-bottom); z-index: 90;
+    transform: scale(var(--lamp-scale)); transform-origin: bottom right; pointer-events: none; -webkit-tap-highlight-color: transparent; }
+.bv-lamp-body { position: relative; display: flex; flex-direction: column; align-items: center; }
+
+.bv-lamp .lamp-head { width: 140px; height: 50px; background: #151515; border-radius: 140px 140px 4px 4px;
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, .1), 0 10px 20px rgba(0, 0, 0, .9);
+    position: relative; z-index: 6; transition: box-shadow .4s ease; border-bottom: 2px solid #050505; }
+.bv-lamp.on .lamp-head { box-shadow: inset 0 -3px 10px rgba(255, 220, 150, .4), inset 0 2px 5px rgba(255, 255, 255, .1); }
+
+.bv-lamp .lamp-glow { position: absolute; top: 40px; width: 90px; height: 20px; background: #fff; border-radius: 50%;
+    box-shadow: 0 0 40px 20px rgba(255, 230, 150, .9), 0 0 80px 40px rgba(255, 200, 100, .6);
+    opacity: 0; transition: opacity .4s ease-in-out; z-index: 5; pointer-events: none; }
+.bv-lamp.on .lamp-glow { opacity: 1; }
+
+.bv-lamp .light-beam { position: absolute; top: 45px; width: 500px; height: 350px; clip-path: polygon(40% 0, 60% 0, 100% 100%, 0 100%);
+    background: linear-gradient(to bottom, rgba(255, 230, 140, .8) 0%, rgba(255, 200, 80, .2) 60%, transparent 100%);
+    opacity: 0; transition: opacity .4s ease-in-out; z-index: 3; pointer-events: none; filter: blur(8px); }
+.bv-lamp.on .light-beam { opacity: .7; }
+
+.bv-lamp .lamp-stem { width: 6px; height: var(--stem, 290px); background: linear-gradient(to right, #050505 0%, #2a2a2a 50%, #050505 100%);
+    position: relative; z-index: 4; transition: background .4s ease, box-shadow .4s ease; }
+.bv-lamp.on .lamp-stem { background: linear-gradient(to right, #050505 0%, #2a2010 50%, #050505 100%); box-shadow: 0 0 10px rgba(255, 200, 100, .15); }
+
+.bv-lamp .lamp-base { width: 100px; height: 16px; background: #151515; border-radius: 30px 30px 4px 4px;
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, .1), 0 10px 20px rgba(0, 0, 0, .9);
+    position: relative; z-index: 5; transition: box-shadow .4s ease; border-bottom: 2px solid #050505; }
+.bv-lamp.on .lamp-base { box-shadow: inset 0 2px 6px rgba(255, 220, 150, .3), 0 10px 20px rgba(0, 0, 0, .35); }
+
+/* en tema oscuro la lámpara apagada se perdería sobre el fondo: un filo dorado muy fino la mantiene visible */
+html[data-theme="dark"] .bv-lamp .lamp-head,
+html[data-theme="dark"] .bv-lamp .lamp-base { background: #1a1917; box-shadow: inset 0 2px 5px rgba(255, 255, 255, .1), 0 0 0 1px rgba(198, 161, 91, .3), 0 10px 20px rgba(0, 0, 0, .9); }
+html[data-theme="dark"] .bv-lamp .lamp-stem { background: linear-gradient(to right, #1a1917 0%, #4a4438 50%, #1a1917 100%); }
+
+/* cuerda + tirador dorado */
+.bv-lamp .string-svg { position: absolute; top: 45px; left: calc(50% + 55px); width: 2px; height: 2px; overflow: visible; z-index: 5; pointer-events: none; }
+.bv-lamp .string-svg path { stroke: #222; stroke-width: 2; stroke-linecap: round; fill: none; }
+html[data-theme="dark"] .bv-lamp .string-svg path { stroke: #5a5143; }   /* sobre fondo oscuro la cuerda necesita verse */
+
+.bv-lamp .string-handle { position: absolute; top: 125px; left: calc(50% + 49px); width: 10px; height: 20px; padding: 0; border: 0;
+    background: linear-gradient(to bottom, #ebd17a, #aa8529); border-radius: 5px;
+    box-shadow: inset 0 2px 3px rgba(255, 255, 255, .5), 0 3px 5px rgba(0, 0, 0, .7);
+    cursor: grab; z-index: 6; touch-action: none; user-select: none; pointer-events: auto;
+    transition: transform .35s cubic-bezier(.2, .8, .2, 1); }
+/* zona de toque ampliada: la lámpara está reducida y el tirador sería muy pequeño */
+.bv-lamp .string-handle::before { content: ""; position: absolute; inset: -26px -28px -30px -28px; }
+.bv-lamp .string-handle.dragging { cursor: grabbing; transition: none; }
+.bv-lamp .string-handle:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 8px; }
+@media (hover: hover) { .bv-lamp .string-handle:hover { filter: brightness(1.12); } }
+
+/* charco de luz cálido sobre toda la pantalla cuando la lámpara está encendida */
+.bv-wash { position: fixed; right: 0; bottom: 0; width: 1100px; height: 1100px; max-width: 160vw; z-index: 80; pointer-events: none;
+    transform: translate(35%, 35%) scale(.6); opacity: 0;
+    background: radial-gradient(circle, rgba(255, 214, 110, .22) 0%, rgba(255, 200, 80, .08) 35%, transparent 68%);
+    transition: opacity .8s ease, transform .8s ease; }
+html[data-theme="light"] .bv-wash { opacity: 1; transform: translate(35%, 35%) scale(1); }
+
+/* luciérnagas (solo con la lámpara encendida) */
+.bv-theme-root .fireflies { position: fixed; inset: 0; pointer-events: none; z-index: 85; overflow: hidden; }
+.bv-theme-root .firefly { position: absolute; top: 0; left: 0; border-radius: 50%; background: #f0b400;
+    box-shadow: 0 0 8px 2px rgba(240, 180, 0, .7), 0 0 18px rgba(255, 179, 0, .45);
+    animation: bvFirefly var(--duration) ease-in-out var(--delay) infinite alternate; }
+@keyframes bvFirefly {
+    0%   { transform: translate(var(--x1), var(--y1)); opacity: .35; }
+    25%  { transform: translate(var(--x2), var(--y2)); opacity: .9; }
+    50%  { transform: translate(var(--x3), var(--y3)); opacity: .5; }
+    75%  { transform: translate(var(--x4), var(--y4)); opacity: .9; }
+    100% { transform: translate(var(--x5), var(--y5)); opacity: .4; }
+}
+
+/* pista "Jala la cuerda" (desaparece tras usar la lámpara una vez) */
+.bv-lamp-hint { position: fixed; z-index: 90; right: calc(var(--lamp-right) + 2px); bottom: calc(var(--lamp-bottom) + var(--lamp-h) * var(--lamp-scale) + 8px);
+    display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none;
+    font: italic 500 13px/1 var(--serif-italic, Georgia, serif); letter-spacing: 1.6px; color: var(--gold-light);
+    transition: opacity .5s ease, transform .5s ease; }
+html[data-theme="light"] .bv-lamp-hint { color: #8a6a2c; }
+.bv-lamp-hint i { width: 1px; height: 26px; background: linear-gradient(to bottom, currentColor, transparent); animation: bvHintArrow 2s infinite; }
+.bv-lamp-hint.gone { opacity: 0; transform: translateY(-14px); visibility: hidden; }
+@keyframes bvHintArrow { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+
+@media (max-width: 900px) { .bv-theme-root { --lamp-scale: .5; --lamp-right: 16px; } }
+/* en móvil la lámpara es más baja (tallo corto) para no tapar el contenido, y se deja espacio al final de cada página */
+@media (max-width: 680px) {
+    .bv-theme-root { --lamp-scale: .5; --lamp-right: 8px; --lamp-bottom: 8px; --stem: 150px; --lamp-h: 220px; }
+    .bv-lamp-hint { display: none; }
+    .site-footer { padding-bottom: 96px; }
+    .owl-login { padding-bottom: 120px; }
+    .register-shell { padding-bottom: 120px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bv-theme-root .firefly, .bv-lamp-hint i { animation: none; }
+    html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after { transition: none !important; }
+}

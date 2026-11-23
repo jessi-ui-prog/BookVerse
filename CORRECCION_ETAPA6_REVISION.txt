@@ -1,0 +1,18 @@
+BOOKVERSE - REVISIÓN DE ETAPA 6
+
+Se corrigieron estilos de los diálogos y se agruparon los botones de archivos.
+Se sincronizó el estado de lectura de Detalles con el panel de usuario.
+Las preferencias de orden y vista ahora se cargan antes del primer render.
+Se añadieron mensajes de error para abrir y quitar archivos.
+
+No se borran los datos guardados en localStorage ni IndexedDB.
+
+PRUEBAS PRIORITARIAS
+1. En admin, abrir Nuevo libro y comprobar Cancelar / Guardar.
+2. En usuario, abrir Detalles y comprobar Cerrar / reseñas / archivos.
+3. Cambiar el estado de lectura y verificar la lista y estadísticas.
+4. Cambiar vista, actualizar y comprobar que se conserva.
+5. Añadir libro, verificar catálogo de usuario y Explorar del sitio.
+6. Probar PDF y EPUB con archivos propios. EPUB requiere Internet para epub.js.
+
+Si alguna prueba falla, envía captura y la pestaña Consola (F12).

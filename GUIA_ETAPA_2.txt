@@ -1,0 +1,31 @@
+BOOKVERSE - ETAPA 2
+
+1. Descomprime BookVerse_Etapa2.zip.
+2. Abre la carpeta BookVerse_Etapa1 en Visual Studio Code.
+3. Ejecuta index.html con Live Server.
+4. En la página principal, entra en "Iniciar sesión".
+5. Cuentas de prueba:
+   Administrador: admin@bookverse.com / admin123
+   Usuario: usuario@bookverse.com / user123
+6. Para crear una cuenta, selecciona "Regístrate aquí".
+   Las cuentas nuevas se crean como usuario general.
+
+Archivos nuevos:
+- css/theme.css y js/theme.js (tema claro/oscuro con lámpara)
+- login/js/auth.js
+- login/registro.html
+- login/css/registro.css
+- login/js/registro.js
+
+Archivos modificados:
+- index.html, login/index.html, login/registro.html (enlazan el tema)
+- login/js/config.js (se quitó SESSION_KEY duplicada que rompía auth.js)
+- login/css/registro.css (espacio bajo la barra y botón dorado)
+- login/index.html
+- login/js/config.js
+- login/js/login.js
+- js/main.js
+- README.md
+
+NOTA:
+El almacenamiento en localStorage es solo demostrativo. No es autenticación segura para producción.

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse | Mi biblioteca</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/paneles.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <meta name="theme-color" content="#111110">
+    <script src="../js/theme.js"></script>
+</head>
+<body class="guard" data-panel="usuario">
+    <div class="shell">
+        <aside class="sidebar">
+            <a class="brand" href="../index.html" title="Ir al sitio"><span class="brand-mark">B</span><span>BOOK<b>VERSE</b></span></a>
+            <p class="role-tag" id="roleTag"></p>
+            <nav class="side-nav" id="sideNav" aria-label="Panel">
+                <a href="#inicio" data-view="inicio"><i>◈</i>Mi biblioteca</a>
+                <a href="#catalogo" data-view="catalogo"><i>❖</i>Catálogo</a>
+                <a href="#favoritos" data-view="favoritos"><i>♡</i>Mis favoritos</a>
+                <a href="#lecturas" data-view="lecturas"><i>☰</i>Lista de lectura</a>
+                <a href="#articulos" data-view="articulos"><i>✎</i>Artículos</a>
+            </nav>
+            <div class="side-foot">
+                <a class="side-link" href="../index.html">← Volver al sitio</a>
+                <button class="btn ghost" id="logoutBtn" type="button">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <main class="panel-main">
+            <header class="panel-head">
+                <p class="eyebrow"><span></span>MI BIBLIOTECA</p>
+                <h1 id="panelTitle">Mi biblioteca</h1>
+                <p class="lead" id="greeting"></p>
+            </header>
+
+            <section data-view="inicio">
+                <div class="stats" id="userStats"></div>
+                <div class="box"><h2>Continúa leyendo</h2><div class="toolbar library-tools"><input type="search" data-filter="readingNow" placeholder="Buscar libros…" aria-label="Buscar en inicio"><select data-sort="readingNow" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><select data-layout="readingNow" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="readingNow" class="books"></div></div>
+            </section>
+
+            <section data-view="catalogo" hidden>
+                <div class="toolbar">
+                    <input id="userSearch" type="search" placeholder="Buscar por título o autor…" aria-label="Buscar libros">
+                    <select id="genreFilter" aria-label="Filtrar por género"><option value="">Todos los géneros</option></select>
+                    <select id="bookSort" aria-label="Ordenar catálogo"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option></select>
+                </div>
+                <div class="toolbar library-tools"><select data-layout="catalog" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="catalog" class="books"></div>
+            </section>
+
+            <section data-view="favoritos" hidden><div class="toolbar library-tools"><input type="search" data-filter="favorites" placeholder="Buscar libros…" aria-label="Buscar en favoritos"><select data-sort="favorites" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><select data-layout="favorites" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="favorites" class="books"></div></section>
+            <section data-view="lecturas" hidden><div class="toolbar library-tools"><input type="search" data-filter="readingList" placeholder="Buscar libros…" aria-label="Buscar en lecturas"><select data-sort="readingList" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><select data-layout="readingList" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="readingList" class="books"></div></section>
+            <section data-view="articulos" hidden>
+                <div class="toolbar"><input id="articleSearch" type="search" placeholder="Buscar artículos por título o autor…" aria-label="Buscar artículos"></div><div class="books" id="articleUserList"></div>
+            </section>
+        </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="../login/js/auth.js"></script>
+    <script src="../js/paneles.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js" defer></script>
+    <script src="../js/etapa6.js" defer></script>
+</body>
+</html>

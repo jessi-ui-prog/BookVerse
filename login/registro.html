@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crea tu cuenta gratuita en BookVerse.">
+    <title>Crear cuenta | BookVerse</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/registro.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+</head>
+<body class="login-page">
+<section class="register-shell">
+    <header class="login-top">
+        <a class="brand" href="../index.html" aria-label="BookVerse, volver al inicio">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span>BOOK<span class="gold-text">VERSE</span></span>
+        </a>
+        <a class="login-back" href="index.html">← Ya tengo cuenta</a>
+    </header>
+    <main class="register-card">
+        <span class="eyebrow"><span class="eyebrow-line"></span> ÚNETE A BOOKVERSE <span class="eyebrow-line"></span></span>
+        <h1>Crea tu <span class="gold-text italic">cuenta</span></h1>
+        <p class="register-intro">Un espacio para descubrir nuevas historias y disfrutar la lectura.</p>
+        <form id="registerForm" novalidate>
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre" name="nombre" type="text" placeholder="Tu nombre" autocomplete="name" required minlength="3">
+            <label for="correo">Correo electrónico</label>
+            <input id="correo" name="correo" type="email" placeholder="nombre@correo.com" autocomplete="email" required>
+            <label for="password">Contraseña</label>
+            <input id="password" name="password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required minlength="6">
+            <label for="confirmPassword">Confirmar contraseña</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" required>
+            <button class="go" type="submit" id="registerButton">Crear cuenta</button>
+            <p class="register-message" id="registerMessage" role="status" aria-live="polite"></p>
+        </form>
+        <p class="register-note">Al registrarte se crea una cuenta de usuario general.</p>
+    </main>
+</section>
+<script src="js/auth.js"></script>
+<script src="js/registro.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookVerse | Panel de administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/paneles.css">
+    <link rel="stylesheet" href="../css/theme.css">
+    <meta name="theme-color" content="#111110">
+    <script src="../js/theme.js"></script>
+</head>
+<body class="guard" data-panel="admin">
+    <div class="shell">
+        <aside class="sidebar">
+            <a class="brand" href="../index.html" title="Ir al sitio"><span class="brand-mark">B</span><span>BOOK<b>VERSE</b></span></a>
+            <p class="role-tag" id="roleTag"></p>
+            <nav class="side-nav" id="sideNav" aria-label="Panel">
+                <a href="#resumen" data-view="resumen"><i>◈</i>Resumen</a>
+                <a href="#libros" data-view="libros"><i>❖</i>Gestión de libros</a>
+                <a href="#usuarios" data-view="usuarios"><i>☺</i>Usuarios</a>
+                <a href="#articulos" data-view="articulos"><i>✎</i>Artículos</a>
+            </nav>
+            <div class="side-foot">
+                <a class="side-link" href="../index.html">← Volver al sitio</a>
+                <button class="btn ghost" id="logoutBtn" type="button">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <main class="panel-main">
+            <header class="panel-head">
+                <p class="eyebrow"><span></span>PANEL DE ADMINISTRACIÓN</p>
+                <h1 id="panelTitle">Resumen</h1>
+                <p class="lead" id="greeting"></p>
+            </header>
+
+            <section data-view="resumen">
+                <div class="stats" id="adminStats"></div>
+                <div class="split">
+                    <div class="box"><h2>Últimos libros</h2><div id="recentBooks" class="mini-list"></div></div>
+                    <div class="box"><h2>Últimos usuarios</h2><div id="recentUsers" class="mini-list"></div></div>
+                </div>
+            </section>
+
+            <section data-view="libros" hidden>
+                <div class="toolbar">
+                    <input id="adminSearch" type="search" placeholder="Buscar por título, autor o género…" aria-label="Buscar libros">
+                    <select id="adminSort" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><button class="btn" id="newBookBtn" type="button">+ Nuevo libro</button>
+                </div>
+                <div id="adminBooks" class="books"></div>
+            </section>
+
+            <section data-view="usuarios" hidden>
+                <div class="box table-box"><div id="usersTable"></div></div>
+                <p class="note">Las contraseñas no se muestran. En esta etapa los usuarios viven en el navegador (localStorage); en la siguiente se moverán a un servidor.</p>
+            </section>
+
+            <section data-view="articulos" hidden>
+                <div class="toolbar"><button type="button" class="btn" id="newArticleBtn">+ Nuevo artículo</button></div><div class="books" id="articleAdminList"></div>
+            </section>
+        </main>
+    </div>
+
+    <dialog id="bookDialog">
+        <form id="bookForm" method="dialog" autocomplete="off">
+            <h2 id="dialogTitle">Nuevo libro</h2>
+            <label>Título<input id="fTitulo" required maxlength="90"></label>
+            <label>Autor<input id="fAutor" required maxlength="70"></label>
+            <label>Género literario<input id="fGenero" list="generos" required maxlength="40"></label>
+            <datalist id="generos"></datalist>
+            <label>Descripción <small>(opcional)</small><textarea id="fDescripcion" rows="3" maxlength="300"></textarea></label>
+            <div class="dialog-actions">
+                <button class="btn ghost" type="button" id="cancelBook">Cancelar</button>
+                <button class="btn" type="submit" id="saveBook">Guardar libro</button>
+            </div>
+        </form>
+    </dialog>
+    <dialog id="articleDialog"><form id="articleForm"><h2 id="articleDialogTitle">Nuevo artículo</h2>
+      <label>Título<input id="articleTitle" required maxlength="110"></label>
+      <label>Autor<input id="articleAuthor" required maxlength="80"></label>
+      <label>Contenido<textarea id="articleContent" required rows="8" maxlength="12000"></textarea></label>
+      <div class="dialog-actions"><button class="btn ghost" id="cancelArticle" type="button">Cancelar</button><button class="btn" type="submit">Guardar artículo</button></div>
+    </form></dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="../login/js/auth.js"></script>
+    <script src="../js/paneles.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js" defer></script>
+    <script src="../js/etapa6.js" defer></script>
+</body>
+</html>

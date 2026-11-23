@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inicia sesión en BookVerse, tu biblioteca virtual.">
+    <title>Iniciar sesión | BookVerse</title>
+    <!-- Login con búho pixelado. Búho original: @codinvisual, t.me/CodinVisual. Uso libre en tu propio sitio; no revender el archivo original. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- 1) estilos de BookVerse: colores (:root), tipografías, logo -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- 2) estilos del login: usan las variables de arriba -->
+    <link rel="stylesheet" href="css/login.css">
+    <!-- 3) tema claro/oscuro y lámpara (compartido con BookVerse) -->
+    <link rel="stylesheet" href="../css/theme.css">
+    <script src="../js/theme.js"></script>
+</head>
+<body class="login-page">
+<section class="owl-login">
+    <header class="login-top">
+        <a class="brand" href="../index.html" aria-label="BookVerse, volver al inicio">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span>BOOK<span class="gold-text">VERSE</span></span>
+        </a>
+        <a class="login-back" href="../index.html">← Volver a BookVerse</a>
+    </header>
+
+    <canvas class="owl" width="44" height="38" aria-hidden="true"></canvas>
+    <form class="owl-form" novalidate>
+        <span class="eyebrow"><span class="eyebrow-line"></span> ACCEDE A TU BIBLIOTECA <span class="eyebrow-line"></span></span>
+        <h1>Bienvenido <span class="gold-text italic">de vuelta</span></h1>
+        <p class="lead">El búho vigila. No mirará tu contraseña.</p>
+        <label class="sr" for="ol-mail">Correo electrónico</label>
+        <input id="ol-mail" type="email" autocomplete="email" placeholder="Correo electrónico">
+        <label class="sr" for="ol-pass">Contraseña</label>
+        <div class="pass">
+            <input id="ol-pass" type="password" autocomplete="current-password" placeholder="Contraseña">
+            <button class="show" type="button" aria-label="Mostrar contraseña" aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+                    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/><path class="slash" d="M4 4l16 16"/>
+                </svg>
+            </button>
+        </div>
+        <button class="go" type="submit">Iniciar sesión</button>
+        <p class="note" role="status"></p>
+        <p class="register-prompt">¿Aún no tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+        <p class="demo-hint">Cuentas de prueba: <code>admin@bookverse.com</code> / <code>admin123</code><br><code>usuario@bookverse.com</code> / <code>user123</code></p>
+    </form>
+</section>
+
+<!-- El orden importa: cada script usa las variables del anterior -->
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/sprites.js"></script>
+<script src="js/owl.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

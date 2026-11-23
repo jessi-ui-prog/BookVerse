@@ -1,0 +1,49 @@
+.register-shell {
+    width: min(100% - 36px, 560px);
+    margin: 0 auto;
+    padding: 100px 0 56px; /* deja sitio a la barra superior fija */
+}
+.register-card {
+    margin: 34px auto 0;
+    padding: clamp(26px, 5vw, 48px);
+    border: 1px solid rgba(201, 164, 92, .28);
+    border-radius: 18px;
+    background: rgba(255,255,255,.035);
+    box-shadow: 0 22px 70px rgba(0,0,0,.24);
+}
+.register-card h1 {
+    margin: 14px 0 8px;
+    text-align: center;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+}
+.register-intro, .register-note {
+    color: rgba(255,255,255,.68);
+    text-align: center;
+    line-height: 1.6;
+}
+#registerForm { display: grid; gap: 10px; margin-top: 28px; }
+#registerForm label { color: rgba(255,255,255,.86); font-size: .9rem; }
+#registerForm input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 15px;
+    border: 1px solid rgba(201,164,92,.32);
+    border-radius: 9px;
+    outline: none;
+    color: #fff;
+    background: rgba(0,0,0,.22);
+    font: inherit;
+}
+#registerForm input:focus { border-color: #c9a45c; box-shadow: 0 0 0 3px rgba(201,164,92,.12); }
+#registerForm .go { margin-top: 12px; cursor: pointer; }
+.register-message { min-height: 22px; margin: 4px 0 0; text-align: center; font-size: .92rem; }
+.register-message.error { color: #ff9b9b; }
+.register-message.success { color: #a7e5b5; }
+.register-note { margin: 20px 0 0; font-size: .82rem; }
+.register-prompt { margin-top: 16px; text-align: center; color: rgba(255,255,255,.72); }
+.register-prompt a { color: #d6b36e; }
+#registerForm .go { display: block; width: 100%; height: 46px; border: 0; border-radius: 9px; background: var(--gold); color: #171511;
+    font: 700 13px var(--sans); letter-spacing: .25px; transition: transform .2s, background .2s; }
+#registerForm .go:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-2px); }
+#registerForm .go:disabled { opacity: .6; cursor: default; }

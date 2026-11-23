@@ -1,0 +1,25 @@
+BOOKVERSE - CORRECCIONES Y ETAPA 5
+
+Se conserva index.html, login y estilos originales.
+
+CORRECCIONES
+- Los libros del administrador ahora se muestran también en Explorar / Biblioteca de la página principal.
+- Se agregó ordenación al panel de administrador.
+- En Mi biblioteca, Favoritos y Lista de lectura hay buscador, orden y selector de vista.
+- Vistas: cuadrícula, lista y compacta.
+- Botón visible para volver a la página principal sin cerrar sesión.
+- Estilos adaptados para centrar el panel en móviles y evitar botones superpuestos.
+
+ETAPA 5
+- Administrador: crear, editar y eliminar artículos literarios.
+- Usuario: consultar y buscar artículos.
+- Artículos almacenados en localStorage bajo bookverse_articulos.
+
+PRUEBAS
+1. Inicia sesión como administrador, agrega un libro y un artículo.
+2. Vuelve a Inicio y entra a Explorar: debe aparecer el libro.
+3. Entra como usuario, prueba las tres vistas y la ordenación.
+4. Comprueba Artículos en el panel de usuario.
+5. Prueba con el navegador estrecho y comprueba que los botones no se pisan.
+
+NOTA: Es un prototipo de navegador (localStorage), no una aplicación multiusuario con servidor.
