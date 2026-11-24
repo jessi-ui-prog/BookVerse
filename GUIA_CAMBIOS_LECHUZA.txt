@@ -1,7 +1,0 @@
-BookVerse - Ajustes de tema y ventanas
-
-Al activar el tema claro en el login, el buho pixelado cambia a una lechuza de plumas blancas y detalles dorados, manteniendo parpadeo, alas y seguimiento de mirada. El tema oscuro conserva el buho original.
-
-Se reforzo la distribucion de botones de Guardar/Cancelar, Cerrar y Abrir/Quitar archivo en CSS.
-
-Prueba con Live Server y Ctrl+F5. Los datos de localStorage e IndexedDB no se eliminan.

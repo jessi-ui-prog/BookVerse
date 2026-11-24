@@ -1,1 +1,0 @@
-Corrección de superposición de botones en diálogos de libros y lector. Se modificó exclusivamente css/paneles.css; se conservaron los archivos HTML y JavaScript. Abrir con Live Server y refrescar con Ctrl+F5. Verificar Nuevo libro, Detalles del libro, valoración, botones de archivos y vista móvil.

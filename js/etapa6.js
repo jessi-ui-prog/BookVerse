@@ -7,8 +7,16 @@ const BOOKS='bookverse_libros';
 const uid=String(USER.id||USER.correo||'usuario');
 const safe=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load=(k,d)=>{try{const x=JSON.parse(localStorage.getItem(k));return x==null?d:x;}catch{return d;}};
-const save=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
-const books=()=>load(BOOKS,[]);
+const save=(k,v)=>{localStorage.setItem(k,JSON.stringify(v));if(k.startsWith('bookverse_lectura_'))window.dispatchEvent(new Event('bookverse:biblioteca-local-cambio'));};
+// Catálogo unificado: los libros de Firebase tienen prioridad si coinciden en ID.
+const books=()=>{
+  const local=load(BOOKS,[]);
+  const remotos=Array.isArray(window.bookverseLibrosFirebase)?window.bookverseLibrosFirebase:[];
+  const porId=new Map();
+  (Array.isArray(local)?local:[]).forEach(b=>porId.set(String(b.id),b));
+  remotos.forEach(b=>porId.set(String(b.id),b));
+  return Array.from(porId.values());
+};
 const revKey='bookverse_resenas_v6';
 const prefsKey='bookverse_preferencias_'+uid;
 const statusKey='bookverse_lectura_'+uid;
@@ -33,6 +41,7 @@ const avg=rr.length?(rr.reduce((n,r)=>n+Number(r.stars),0)/rr.length).toFixed(1)
 document.getElementById('bv6Controls').innerHTML=`<h3>Mi lectura</h3><label>Estado <select id="bv6State"><option value="pendiente">Por leer</option><option value="leyendo">Leyendo</option><option value="leido">Terminado</option></select></label><p class="bv6-help">El estado se guarda en tu cuenta y aparecerá en la lista de lectura.</p><h3>Mi valoración</h3><label>Estrellas <select id="bv6Stars">${[1,2,3,4,5].map(n=>`<option value="${n}">${'★'.repeat(n)} (${n}/5)</option>`).join('')}</select></label><label>Reseña <textarea id="bv6Text" rows="3" maxlength="1500" placeholder="Escribe tu opinión..."></textarea></label><button class="btn" id="bv6SaveReview">Guardar valoración y reseña</button><h3>Archivo para leer</h3><label>Seleccionar PDF o EPUB <input type="file" id="bv6File" accept=".pdf,.epub,application/pdf,application/epub+zip"></label><p class="bv6-help">El archivo se guarda en este navegador (IndexedDB). No se publica ni se sube a un servidor. Usa solo archivos que tengas derecho a leer.</p><div class="bv6-file-actions"><button type="button" class="btn ghost small" id="bv6OpenFile">Abrir archivo guardado</button><button type="button" class="btn ghost small" id="bv6RemoveFile">Quitar archivo guardado</button></div>`;
 document.getElementById('bv6Reviews').innerHTML=`<h3>Opiniones de lectores · ${safe(avg)} ${rr.length?'★':''}</h3>`+(rr.length?rr.map(r=>`<div class="bv6-review"><strong>${safe(r.author)} · ${'★'.repeat(r.stars)}</strong><p>${safe(r.text||'Sin comentario.')}</p></div>`).join(''):'<p>Todavía no hay reseñas.</p>');
 document.getElementById('bv6State').value=status(String(b.id));
+if(b.archivoURL && /^https:\/\/[^\s]+$/i.test(b.archivoURL)){const wrap=document.createElement('p');const a=document.createElement('a');a.href=b.archivoURL;a.target='_blank';a.rel='noopener noreferrer';a.textContent='📖 Abrir archivo compartido (sitio externo)';a.className='btn ghost small';wrap.append(a);document.getElementById('bv6Controls').append(wrap);}
 document.getElementById('bv6Stars').value=mine?.stars||5;
 document.getElementById('bv6Text').value=mine?.text||'';
 document.getElementById('bv6State').onchange=e=>{let r=load(statusKey,[]);const x=r.find(x=>String(x.id)===String(b.id));if(x)x.estado=e.target.value;else r.push({id:b.id,estado:e.target.value});save(statusKey,r);document.dispatchEvent(new Event('bv6:updated'));window.dispatchEvent(new Event('bv6:updated'));};

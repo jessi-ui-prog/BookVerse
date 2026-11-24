@@ -33,7 +33,7 @@
     function readJSON(key, fallback) {
         try { var value = JSON.parse(localStorage.getItem(key)); return value == null ? fallback : value; } catch (e) { return fallback; }
     }
-    function writeJSON(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} }
+    function writeJSON(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); if (key.startsWith("bookverse_favoritos_") || key.startsWith("bookverse_lectura_")) window.dispatchEvent(new Event("bookverse:biblioteca-local-cambio")); } catch (e) { console.error("No se pudo guardar localmente", e); } }
     function newId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2); }
     function isAdmin(user) { return user && user.rol === "administrador"; }
 
@@ -45,14 +45,48 @@
     document.body.classList.remove("guard");
 
     // ---------- Datos ----------
-    function getBooks() {
-        var books = readJSON(BOOKS_KEY, null);
-        if (!Array.isArray(books)) {
-            books = SEED.map(function (b, i) { return { id: "demo-" + (i + 1), titulo: b[0], autor: b[1], genero: b[2], descripcion: "" }; });
-            writeJSON(BOOKS_KEY, books);
-        }
-        return books;
+    
+function getBooks() {
+    var books = readJSON(BOOKS_KEY, null);
+
+    if (!Array.isArray(books)) {
+        books = SEED.map(function (b, i) {
+            return {
+                id: "demo-" + (i + 1),
+                titulo: b[0],
+                autor: b[1],
+                genero: b[2],
+                descripcion: ""
+            };
+        });
+
+        writeJSON(BOOKS_KEY, books);
     }
+
+    var firebaseBooks =
+        window.bookverseLibrosFirebase || [];
+
+    // Identificar libros repetidos por título y autor.
+    function claveLibro(libro) {
+        return [
+            String(libro.titulo || "").trim().toLowerCase(),
+            String(libro.autor || "").trim().toLowerCase()
+        ].join("|");
+    }
+
+    var claves = new Set(
+        firebaseBooks.map(claveLibro)
+    );
+
+    // Preferir la versión de Firebase cuando
+    // coincidan título y autor.
+    var locales = books.filter(function (libro) {
+        return !claves.has(claveLibro(libro));
+    });
+
+    return firebaseBooks.concat(locales);
+}
+
     function getArticles() { var a=readJSON(ARTICLES_KEY,[]); return Array.isArray(a)?a:[]; }
     function saveArticles(a) { writeJSON(ARTICLES_KEY,a); }
     function compareBooks(a,b,sort) { var field=sort.indexOf("autor")===0?"autor":"titulo"; var v=String(a[field]).localeCompare(String(b[field]),"es",{sensitivity:"base"}); return sort.endsWith("desc")?-v:v; }
@@ -111,7 +145,7 @@
 
     $("roleTag").textContent = isAdmin(user) ? "ADMINISTRADOR" : "USUARIO GENERAL";
     $("greeting").textContent = "Bienvenido, " + (user.nombre || user.correo) + ".";
-    $("logoutBtn").addEventListener("click", function () { logoutUser(); location.href = "../index.html"; });
+    $("logoutBtn").addEventListener("click", function () { logoutUser(); });
     window.addEventListener("hashchange", route);
     window.addEventListener("pageshow", function (e) { if (e.persisted && !getCurrentUser()) location.replace(LOGIN_URL); });
     window.addEventListener("storage", function () { if (!getCurrentUser()) location.replace(LOGIN_URL); });
@@ -313,5 +347,13 @@
     }
     route();
     if (PANEL === "admin") initAdmin(); else initUser();
+    if (PANEL === "usuario") {
+    window.addEventListener(
+        "bookverse:catalogo-actualizado",
+        function () {
+            renderUser();
+        }
+    );
+}
     initArticles();
 })();
