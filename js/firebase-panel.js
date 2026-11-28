@@ -45,10 +45,11 @@ onAuthStateChanged(auth, async (firebaseUser) => {
   // Cargar las funciones del panel después de verificar Firebase.
   await cargarScript("../js/paneles.js");
 
-  await cargarScript(
-    "https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js"
-  );
-  
+  try {
+    await cargarScript("https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js");
+    await cargarScript("https://cdn.jsdelivr.net/npm/epubjs@0.3.93/dist/epub.min.js");
+  } catch (error) { console.warn("Lector EPUB no disponible:", error); }
+
   await cargarScript("../js/etapa6.js");
 
   await import("./firebase-catalogo.js");

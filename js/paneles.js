@@ -129,7 +129,7 @@ function getBooks() {
 
     var TITLES = {
         admin: { resumen: "Resumen", libros: "Gestión de libros", usuarios: "Usuarios", articulos: "Artículos" },
-        usuario: { inicio: "Mi biblioteca", catalogo: "Catálogo", favoritos: "Mis favoritos", lecturas: "Lista de lectura", articulos: "Artículos" }
+        usuario: { inicio: "Mi biblioteca", catalogo: "Catálogo", publicaciones: "Mis publicaciones", favoritos: "Mis favoritos", lecturas: "Lista de lectura", articulos: "Artículos" }
     }[PANEL];
     var FIRST = Object.keys(TITLES)[0];
 

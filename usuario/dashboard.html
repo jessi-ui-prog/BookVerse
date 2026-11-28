@@ -20,6 +20,7 @@
             <nav class="side-nav" id="sideNav" aria-label="Panel">
                 <a href="#inicio" data-view="inicio"><i>◈</i>Mi biblioteca</a>
                 <a href="#catalogo" data-view="catalogo"><i>❖</i>Catálogo</a>
+                <a href="#publicaciones" data-view="publicaciones"><i>▤</i>Mis publicaciones</a>
                 <a href="#favoritos" data-view="favoritos"><i>♡</i>Mis favoritos</a>
                 <a href="#lecturas" data-view="lecturas"><i>☰</i>Lista de lectura</a>
                 <a href="#articulos" data-view="articulos"><i>✎</i>Artículos</a>
@@ -51,6 +52,7 @@
                 <div class="toolbar library-tools"><select data-layout="catalog" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="catalog" class="books"></div>
             </section>
 
+            <section data-view="publicaciones" hidden></section>
             <section data-view="favoritos" hidden><div class="toolbar library-tools"><input type="search" data-filter="favorites" placeholder="Buscar libros…" aria-label="Buscar en favoritos"><select data-sort="favorites" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><select data-layout="favorites" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="favorites" class="books"></div></section>
             <section data-view="lecturas" hidden><div class="toolbar library-tools"><input type="search" data-filter="readingList" placeholder="Buscar libros…" aria-label="Buscar en lecturas"><select data-sort="readingList" aria-label="Ordenar libros"><option value="titulo">Título A–Z</option><option value="titulo-desc">Título Z–A</option><option value="autor">Autor A–Z</option><option value="autor-desc">Autor Z–A</option></select><select data-layout="readingList" aria-label="Cambiar vista"><option value="grid">▦ Cuadrícula</option><option value="list">☰ Lista</option><option value="compact">▤ Compacta</option></select></div><div id="readingList" class="books"></div></section>
             <section data-view="articulos" hidden>

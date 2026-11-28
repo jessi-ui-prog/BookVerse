@@ -1,3 +1,4 @@
+import { autorizarUsuario } from "../../js/firebase-autorizacion.js";
 
 import { auth } from "../../js/firebase-config.js";
 
@@ -53,11 +54,12 @@ form.addEventListener("submit", async (event) => {
       displayName: nombre
     });
 
-    // El login actual todavía no utiliza Firebase.
+    let autorizado = true;
+    try { await autorizarUsuario(credenciales.user); } catch (e) { autorizado = false; console.warn("Autorización pendiente:", e.message); }
     await signOut(auth);
 
     mensaje.textContent =
-      "¡Cuenta creada correctamente en Firebase!";
+      autorizado ? "¡Cuenta creada correctamente! Ya puedes publicar libros." : "¡Cuenta creada! La autorización se reintentará al iniciar sesión o publicar.";
     mensaje.classList.add("success");
 
     form.reset();

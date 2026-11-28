@@ -116,6 +116,7 @@ form.addEventListener("submit", async e => {
       pass.value
     );
 
+    try { const { autorizarUsuario } = await import("../../js/firebase-autorizacion.js"); await autorizarUsuario(credenciales.user); } catch (e) { console.warn("Autorización pendiente:", e.message); }
     cheer();
     form.classList.add("done");
 
@@ -134,7 +135,6 @@ form.addEventListener("submit", async e => {
       credenciales.user.uid
     );
 
-<<<<<<< HEAD
     let destino = "../usuario/dashboard.html";
     try {
       const { db } = await import("../../js/firebase-config.js");
@@ -149,11 +149,6 @@ form.addEventListener("submit", async e => {
       },{merge:true});
     } catch (err) { console.warn("Perfil o rol no disponible:",err); }
     setTimeout(() => { window.location.href = destino; }, 1200);
-=======
-    setTimeout(() => {
-    window.location.href = "../usuario/dashboard.html";
-    }, 1200);
->>>>>>> 2e42f958300c100ca3b3882b530d4e91f83f3e1a
 
     // Primero debemos adaptar sus comprobaciones de sesión.
   

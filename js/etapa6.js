@@ -20,14 +20,14 @@ const books=()=>{
 const revKey='bookverse_resenas_v6';
 const prefsKey='bookverse_preferencias_'+uid;
 const statusKey='bookverse_lectura_'+uid;
-let active=null, objectURL=null, rendition=null;
+let active=null, objectURL=null, rendition=null, epubBook=null, readerRun=0, readerAbort=null, readerCleanup=null;
 const dlg=document.createElement('dialog');dlg.className='bv6-dialog';dlg.id='bv6Dialog';dlg.innerHTML=`<div class="bv6-top"><h2 id="bv6Title">Libro</h2><button type="button" class="btn ghost small" id="bv6Close">Cerrar ×</button></div><div id="bv6Info"></div><div id="bv6Controls"></div><div id="bv6Reviews"></div><div id="bv6Reader" hidden><div class="bv6-reader-bar"><button type="button" class="btn ghost small" id="bv6Prev">← Anterior</button><button type="button" class="btn ghost small" id="bv6Next">Siguiente →</button><button type="button" class="btn ghost small" id="bv6Hide">Cerrar lector</button></div><div id="bv6Frame"></div></div>`;
 document.body.appendChild(dlg);
 const byId=id=>books().find(b=>String(b.id)===String(id));
 const reviews=()=>load(revKey,[]);
 const myReview=id=>reviews().find(r=>r.bookId===id&&r.userId===uid);
 const status=id=>load(statusKey,[]).find(r=>String(r.id)===String(id))?.estado||'pendiente';
-function clearReader(){if(rendition){try{rendition.destroy();}catch{}rendition=null;}if(objectURL){URL.revokeObjectURL(objectURL);objectURL=null;}document.getElementById('bv6Frame').replaceChildren();document.getElementById('bv6Reader').hidden=true;}
+function clearReader(){readerCleanup?.();readerCleanup=null;readerRun++;readerAbort?.abort();readerAbort=null;if(epubBook){try{epubBook.destroy();}catch{}epubBook=null;}if(rendition){try{rendition.destroy();}catch{}rendition=null;}if(objectURL){URL.revokeObjectURL(objectURL);objectURL=null;}document.getElementById('bv6Frame').replaceChildren();document.getElementById('bv6Reader').hidden=true;}
 function close(){clearReader();dlg.close();}
 document.getElementById('bv6Close').onclick=close;
 dlg.addEventListener('close',clearReader);
@@ -41,7 +41,7 @@ const avg=rr.length?(rr.reduce((n,r)=>n+Number(r.stars),0)/rr.length).toFixed(1)
 document.getElementById('bv6Controls').innerHTML=`<h3>Mi lectura</h3><label>Estado <select id="bv6State"><option value="pendiente">Por leer</option><option value="leyendo">Leyendo</option><option value="leido">Terminado</option></select></label><p class="bv6-help">El estado se guarda en tu cuenta y aparecerá en la lista de lectura.</p><h3>Mi valoración</h3><label>Estrellas <select id="bv6Stars">${[1,2,3,4,5].map(n=>`<option value="${n}">${'★'.repeat(n)} (${n}/5)</option>`).join('')}</select></label><label>Reseña <textarea id="bv6Text" rows="3" maxlength="1500" placeholder="Escribe tu opinión..."></textarea></label><button class="btn" id="bv6SaveReview">Guardar valoración y reseña</button><h3>Archivo para leer</h3><label>Seleccionar PDF o EPUB <input type="file" id="bv6File" accept=".pdf,.epub,application/pdf,application/epub+zip"></label><p class="bv6-help">El archivo se guarda en este navegador (IndexedDB). No se publica ni se sube a un servidor. Usa solo archivos que tengas derecho a leer.</p><div class="bv6-file-actions"><button type="button" class="btn ghost small" id="bv6OpenFile">Abrir archivo guardado</button><button type="button" class="btn ghost small" id="bv6RemoveFile">Quitar archivo guardado</button></div>`;
 document.getElementById('bv6Reviews').innerHTML=`<h3>Opiniones de lectores · ${safe(avg)} ${rr.length?'★':''}</h3>`+(rr.length?rr.map(r=>`<div class="bv6-review"><strong>${safe(r.author)} · ${'★'.repeat(r.stars)}</strong><p>${safe(r.text||'Sin comentario.')}</p></div>`).join(''):'<p>Todavía no hay reseñas.</p>');
 document.getElementById('bv6State').value=status(String(b.id));
-if(b.archivoURL && /^https:\/\/[^\s]+$/i.test(b.archivoURL)){const wrap=document.createElement('p');const a=document.createElement('a');a.href=b.archivoURL;a.target='_blank';a.rel='noopener noreferrer';a.textContent='📖 Abrir archivo compartido (sitio externo)';a.className='btn ghost small';wrap.append(a);document.getElementById('bv6Controls').append(wrap);}
+if(b.archivoURL && /^https:\/\/[^\s]+$/i.test(b.archivoURL)){const wrap=document.createElement('p');const a=document.createElement('a');a.href=b.archivoURL;a.target='_blank';a.rel='noopener noreferrer';a.textContent='📖 Abrir archivo compartido (sitio externo)';a.className='btn ghost small';wrap.append(a);if(/\.epub$/i.test(new URL(b.archivoURL).pathname)){const read=document.createElement('button');read.type='button';read.className='btn';read.textContent='Leer EPUB en BookVerse';read.onclick=()=>openRemoteEpub(b);wrap.prepend(read);}document.getElementById('bv6Controls').append(wrap);}
 document.getElementById('bv6Stars').value=mine?.stars||5;
 document.getElementById('bv6Text').value=mine?.text||'';
 document.getElementById('bv6State').onchange=e=>{let r=load(statusKey,[]);const x=r.find(x=>String(x.id)===String(b.id));if(x)x.estado=e.target.value;else r.push({id:b.id,estado:e.target.value});save(statusKey,r);document.dispatchEvent(new Event('bv6:updated'));window.dispatchEvent(new Event('bv6:updated'));};
@@ -60,7 +60,44 @@ const getFile=id=>fileOp('readonly',fileKey(id));
 const deleteFile=id=>fileOp('readwrite',fileKey(id),null);
 async function openFile(id){const file=await getFile(id);if(!file){alert('Primero selecciona un archivo PDF o EPUB para este libro.');return;}clearReader();const frame=document.getElementById('bv6Frame');document.getElementById('bv6Reader').hidden=false;const ext=file.name.toLowerCase().split('.').pop();
 if(ext==='pdf'){objectURL=URL.createObjectURL(file);const iframe=document.createElement('iframe');iframe.src=objectURL;iframe.title='Lector PDF';iframe.className='bv6-pdf';frame.appendChild(iframe);document.getElementById('bv6Prev').hidden=true;document.getElementById('bv6Next').hidden=true;}
-else{document.getElementById('bv6Prev').hidden=false;document.getElementById('bv6Next').hidden=false;if(typeof window.ePub!=='function'){frame.textContent='El lector EPUB necesita cargar epub.js desde Internet. Conéctate y vuelve a abrir este archivo.';return;}try{const buffer=await file.arrayBuffer();const book=window.ePub(buffer);const viewer=document.createElement('div');viewer.className='bv6-epub';frame.appendChild(viewer);rendition=book.renderTo(viewer,{width:'100%',height:520});await rendition.display();document.getElementById('bv6Prev').onclick=()=>rendition?.prev();document.getElementById('bv6Next').onclick=()=>rendition?.next();}catch(err){frame.textContent='No se pudo abrir el EPUB: '+err.message;}}
+else{const run=readerRun;try{const buffer=await file.arrayBuffer();if(run===readerRun)await showEpub(buffer,id+'::'+file.name+'::'+file.lastModified,run);}catch(err){if(run===readerRun)frame.textContent='No se pudo abrir el EPUB: '+err.message;}}
+}
+async function openRemoteEpub(b){
+ clearReader();const run=readerRun;readerAbort=new AbortController();
+ const frame=document.getElementById('bv6Frame');document.getElementById('bv6Reader').hidden=false;
+ frame.textContent='Cargando EPUB…';frame.scrollIntoView({block:'nearest'});
+ try{const response=await fetch(b.archivoURL,{signal:readerAbort.signal,credentials:'omit'});if(!response.ok)throw new Error('HTTP '+response.status);const buffer=await response.arrayBuffer();if(run!==readerRun)return;if(buffer.byteLength>50*1024*1024)throw new Error('El archivo supera 50 MB.');await showEpub(buffer,b.id+'::'+b.archivoURL,run);}catch(err){if(run===readerRun)frame.textContent='No se pudo abrir el EPUB. Usa el enlace externo si el servidor no permite la lectura interna. '+err.message;}
+}
+async function showEpub(buffer,id,run){
+ const frame=document.getElementById('bv6Frame');frame.replaceChildren();
+ if(typeof window.ePub!=='function')throw new Error('No se pudo cargar EPUB.js.');
+ const tools=document.createElement('div');tools.className='bv11-tools';tools.innerHTML=`<label>Capítulos <select aria-label="Capítulos"><option value="">Seleccionar capítulo</option></select></label><label>Letra <select aria-label="Tamaño de letra"><option>90%</option><option selected>110%</option><option>130%</option><option>150%</option><option>180%</option></select></label><label>Tema <select aria-label="Tema"><option value="light">Claro</option><option value="dark">Oscuro</option><option value="sepia">Sepia</option></select></label><progress max="100" value="0"></progress><span role="status">Calculando progreso…</span>`;
+ frame.append(tools);const viewer=document.createElement('div');viewer.className='bv11-viewer';frame.append(viewer);
+ const [chapters,font,theme]=tools.querySelectorAll('select');const progress=tools.querySelector('progress');const status=tools.querySelector('span');
+ const book=window.ePub(buffer);epubBook=book;const r=book.renderTo(viewer,{width:'100%',height:'100%',spread:'none',allowScriptedContent:false,allowPopups:false});rendition=r;
+ const key='bookverse_epub_position_'+uid+'::'+id;const saved=load(key,null);
+ const themes={light:{background:'#fff',color:'#222'},dark:{background:'#171717',color:'#eee'},sepia:{background:'#f4ecd8',color:'#493a29'}};
+ const settingsKey='bookverse_epub_settings_'+uid;
+ const settings=load(settingsKey,{});if(themes[settings.theme])theme.value=settings.theme;if([...font.options].some(o=>o.value===settings.font))font.value=settings.font;
+ function paint(contents){const doc=contents.document;if(!doc?.head)return;let style=doc.getElementById('bv-reader-theme');if(!style){style=doc.createElement('style');style.id='bv-reader-theme';}const c=themes[theme.value];style.textContent=`html,body {background-color:${c.background} !important;color:${c.color} !important;} body *:not(img):not(svg):not(svg *) {color:${c.color} !important;background-color:transparent !important;} a {text-decoration:underline !important;}`;doc.head.append(style);}
+ function apply(){viewer.style.background=themes[theme.value].background;r.themes.fontSize(font.value);for(const c of r.getContents())paint(c);try{save(settingsKey,{theme:theme.value,font:font.value});}catch{}}
+ font.onchange=theme.onchange=apply;
+ r.hooks.content.register(contents=>{paint(contents);const doc=contents.document;let start=null,lastSwipe=0;const interactive=e=>e.target?.closest?.('a,button,input,select,textarea,[contenteditable]');const selected=()=>!!doc.getSelection()?.toString();
+ doc.addEventListener('touchstart',e=>{start=e.touches.length===1&&!interactive(e)?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;},{passive:true});
+ doc.addEventListener('touchcancel',()=>{start=null;});
+ doc.addEventListener('touchend',e=>{if(!start)return;const t=e.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;start=null;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5&&!selected()){lastSwipe=Date.now();if(e.cancelable)e.preventDefault();turn(dx<0?1:-1);}},{passive:false});
+ doc.addEventListener('click',e=>{if(Date.now()-lastSwipe<500||interactive(e)||selected())return;const width=doc.documentElement.clientWidth;if(e.clientX<width*.20)turn(-1);else if(e.clientX>width*.80)turn(1);});
+ doc.addEventListener('keydown',keyboard);
+ });
+ function keyboard(e){if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.target?.closest?.('input,select,textarea,button,[contenteditable]'))return;if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();turn(e.key==='ArrowRight'?1:-1);}}
+ dlg.addEventListener('keydown',keyboard);const cleanup=()=>dlg.removeEventListener('keydown',keyboard);readerCleanup=cleanup;
+ apply();
+ let current=null;function update(){if(run!==readerRun||!current)return;try{const fraction=book.locations.percentageFromCfi(current);if(typeof fraction==='number'&&Number.isFinite(fraction)){progress.value=Math.round(fraction*100);status.textContent=progress.value+'% leído';}}catch{}}
+ r.on('relocated',location=>{if(run!==readerRun)return;current=location.start.cfi;try{save(key,current);}catch{}update();});
+ const prev=document.getElementById('bv6Prev'),next=document.getElementById('bv6Next');prev.hidden=next.hidden=false;const go=fn=>Promise.resolve().then(fn).catch(()=>{if(run===readerRun)status.textContent='No se pudo cambiar de página.';});let turning=false;function turn(direction){if(turning||run!==readerRun)return;turning=true;go(()=>direction<0?r.prev():r.next()).finally(()=>{turning=false;});}prev.onclick=()=>turn(-1);next.onclick=()=>turn(1);chapters.onchange=()=>{if(chapters.value)go(()=>r.display(chapters.value));};
+ try{await r.display(saved||undefined);}catch(err){if(run!==readerRun)return;if(!saved)throw err;await r.display();}if(run!==readerRun)return;viewer.scrollIntoView({block:'nearest'});
+ book.loaded.navigation.then(nav=>{if(run!==readerRun)return;function add(items,depth=0){for(const item of items||[]){const opt=document.createElement('option');opt.value=item.href;opt.textContent='  '.repeat(depth)+item.label.trim();chapters.append(opt);add(item.subitems,depth+1);}}add(nav.toc);}).catch(()=>{});
+ book.ready.then(()=>{if(run===readerRun)return book.locations.generate(1600);}).then(update).catch(()=>{if(run===readerRun)status.textContent='Progreso no disponible';});
 }
 // Preferencias de vista y orden, por usuario, incluso tras recargar.
 const pref=load(prefsKey,{});

@@ -1,24 +1,30 @@
+import { eliminarArchivoLibro, rutaArchivoBookVerse } from "./supabase-storage.js";
 import { auth, db } from "./firebase-config.js";
 import { collection, query, where, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { cargarLibrosFirebase } from "./firebase-catalogo.js";
 
-const catalogo = document.querySelector('section[data-view="catalogo"]');
+const catalogo = document.querySelector('section[data-view="publicaciones"]');
 if (catalogo) {
   const section = document.createElement('section');
   section.id = 'bv-mis-publicaciones';
-  section.style.cssText = 'margin:20px 0;padding:18px;border:1px solid #a78241;border-radius:14px;background:#211d1a;color:#f7ebd4;';
-  section.innerHTML = '<h2 style="color:#e6c178;margin:0 0 8px">Mis publicaciones</h2><p>Administra los libros que publicaste desde tu cuenta.</p>';
+  section.className = 'bv-publicaciones';
+  section.innerHTML = '<p class="bv-pub-intro">Administra los libros que publicaste desde tu cuenta.</p>'; 
   const refresh = document.createElement('button');
   refresh.type = 'button'; refresh.textContent = 'Actualizar mis publicaciones';
-  refresh.className = 'btn ghost small';
+  refresh.className = 'btn ghost';
   const status = document.createElement('p');
   status.setAttribute('role','status'); status.setAttribute('aria-live','polite');
   const list = document.createElement('div');
-  list.style.cssText = 'display:grid;gap:12px;margin-top:14px;';
-  section.append(refresh,status,list);
-  const toolbar = catalogo.querySelector('.toolbar');
-  if (toolbar) toolbar.insertAdjacentElement('beforebegin',section);
-  else catalogo.prepend(section);
+  list.className = 'bv-pub-list';
+  const toolbar = document.createElement('div');
+  toolbar.className = 'bv-pub-actions';
+  const publish = document.createElement('button');
+  publish.type = 'button'; publish.className = 'btn'; publish.textContent = '+ Publicar libro';
+  publish.addEventListener('click', () => { window.dispatchEvent(new Event('bookverse:publicar')); });
+  toolbar.append(publish, refresh);
+  status.className = 'bv-pub-status';
+  section.append(toolbar,status,list);
+  catalogo.append(section);
 
   const fieldSpecs = [
     ['titulo','Título',150,true], ['autor','Autor',120,true],
@@ -36,7 +42,7 @@ if (catalogo) {
     refresh.disabled = true;
     try {
       // Las reglas de Firestore permiten leer únicamente libros públicos.
-      // Ambos filtros son necesarios para que la consulta sea autorizada.
+      // Filtramos por propietario en el cliente después de consultar libros públicos.
       const q = query(collection(db,'libros'),where('publico','==',true));
       const snap = await getDocs(q);
       const propios = snap.docs.filter(item => item.data().creadoPor === user.uid);
@@ -52,17 +58,17 @@ if (catalogo) {
 
   function mostrar(id,libro) {
     const card = document.createElement('article');
-    card.style.cssText = 'padding:14px;border:1px solid #6f5938;border-radius:10px;';
+    card.className = 'bv-pub-card';
     const heading = document.createElement('strong');
     heading.textContent = `${libro.titulo || 'Sin título'} — ${libro.autor || 'Autor desconocido'}`;
     const detail = document.createElement('p');
     detail.textContent = `${libro.genero || 'General'} · ${libro.descripcion || 'Sin descripción'}`;
     const actions = document.createElement('div');
-    actions.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
+    actions.className = 'bv-pub-actions';
     const edit = document.createElement('button');
-    edit.type='button'; edit.textContent='Editar'; edit.style.cssText=buttonStyle+'background:#c7a15a;color:#15120d;';
+    edit.type='button'; edit.textContent='Editar'; edit.className='btn';
     const remove = document.createElement('button');
-    remove.type='button'; remove.textContent='Eliminar'; remove.style.cssText=buttonStyle+'background:transparent;color:#f7ebd4;';
+    remove.type='button'; remove.textContent='Eliminar'; remove.className='btn danger';
     const feedback = document.createElement('p');
     feedback.setAttribute('role','status'); feedback.setAttribute('aria-live','polite');
     actions.append(edit,remove);
@@ -80,6 +86,7 @@ if (catalogo) {
         const input = document.createElement(key==='descripcion'?'textarea':'input');
         if (key!=='descripcion') input.type='text';
         input.maxLength=max; input.required=required; input.value=libro[key]||'';
+        if (key === "archivoURL" && rutaArchivoBookVerse(libro.archivoURL, libro.creadoPor)) { input.readOnly = true; input.title = "Archivo alojado: publica otro libro para reemplazarlo."; }
         input.style.cssText=styleInput;
         if (key==='descripcion') input.rows=3;
         wrapper.append(input); form.append(wrapper); controls[key]=input;
@@ -113,12 +120,18 @@ if (catalogo) {
       try {
         if (auth.currentUser?.uid!==libro.creadoPor) throw new Error('Esta publicación no pertenece a tu cuenta.');
         await deleteDoc(doc(db,'libros',id));
+        const ruta = rutaArchivoBookVerse(libro.archivoURL, libro.creadoPor);
+        let aviso = '';
+        if (ruta) { try { await eliminarArchivoLibro(ruta); } catch (e) { console.error(e); aviso = 'Publicación eliminada, pero el archivo requiere limpieza manual en Supabase: ' + ruta; } }
         await cargarLibrosFirebase();
         await listar();
+        if (aviso) status.textContent = aviso;
       } catch(error) {console.error(error);feedback.textContent='No se pudo eliminar: '+(error.code||error.message);remove.disabled=false;edit.disabled=false;}
     });
   }
 
   refresh.addEventListener('click',listar);
-  await listar();
+  window.addEventListener('bookverse:publicacion-guardada', () => { if (location.hash === '#publicaciones') listar(); });
+  window.addEventListener('hashchange', () => { if (location.hash === '#publicaciones') listar(); });
+  if (location.hash === '#publicaciones') await listar();
 }
